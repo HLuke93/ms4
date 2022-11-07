@@ -10,21 +10,23 @@ class PostList(generic.ListView):
     paginate_by = 6
 
 
-class PostDetail(view):
+class PostDetail(View):
 
-    def get(self, register, slug, *args, *kwargs):
+    def get(self, register, slug, *args, **kwargs):
         queryset = Post.objects.filter(status=1)
         post = get_object_or_404(queryset, slug=slug)
         comments = post.comments.filter(approved=True.order_by('created_on'))
-        liked = Falseif post.likesfilter(id=self.request.user.id).exists():
+        liked = False
+        if post.likesfilter(id=self.request.user.id).exists():
+            liked=True
 
-    return render(
-        request,
-        'post_detail.html',
-        {
-            'post' : post,
-            'comments' : comments,
-            'liked' : liked
-        },
-    )
+        return render(
+            request,
+            'post_detail.html',
+            {
+                'post' : post,
+                'comments' : comments,
+                'liked' : liked
+            },
+        )
 
